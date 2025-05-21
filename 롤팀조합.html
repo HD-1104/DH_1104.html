@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>롤 팀 자동 배정기</title>
+  <style>
+    body { font-family: 'Arial'; background: #f8f9fa; margin: 20px; text-align: center; }
+    h1 { font-size: 28px; margin-bottom: 30px; }
+    .players-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1100px; margin: 0 auto 30px auto; }
+    .player-box {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      width: 200px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .player-box input, .player-box select {
+      width: 100%; margin-bottom: 8px; padding: 5px;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    .label { text-align: left; font-size: 14px; font-weight: bold; margin: 4px 0 2px 0; }
+    button {
+      padding: 10px 20px; font-size: 16px;
+      background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer;
+    }
+    button:hover { background-color: #45a049; }
+    .team-output { display: flex; justify-content: center; gap: 50px; margin-top: 30px; }
+    .team-box {
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      width: 300px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 롤 팀 자동 배정기</h1>
+  <div class="players-container" id="players"></div>
+  <button onclick="assignTeams()">✅ 역할/티어 기반 팀 배정</button>
+  <div class="team-output" id="result"></div>
+
+  <script>
+    const tiers = ["아이언", "브론즈", "실버", "골드", "플래티넘", "에메랄드", "다이아몬드", "마스터", "그랜드마스터", "챌린저"];
+    const tierScore = {
+      "아이언": 1, "브론즈": 2, "실버": 3, "골드": 4,
+      "플래티넘": 5, "에메랄드": 6, "다이아몬드": 7,
+      "마스터": 8, "그랜드마스터": 9, "챌린저": 10
+    };
+    const roles = ["탑", "정글", "미드", "원딜", "서폿"];
+
+    const container = document.getElementById('players');
+    for (let i = 1; i <= 10; i++) {
+      const box = document.createElement('div');
+      box.className = 'player-box';
+      box.innerHTML = `
+        <div class="label">플레이어 ${i}</div>
+        <input type="text" placeholder="소환사명" id="name${i}">
+        <div class="label">티어</div>
+        <select id="tier${i}">
+          ${tiers.map(tier => `<option>${tier}</option>`).join('')}
+        </select>
+        <div class="label">1순위</div>
+        <select id="role1_${i}">
+          ${roles.map(role => `<option>${role}</option>`).join('')}
+        </select>
+        <div class="label">2순위</div>
+        <select id="role2_${i}">
+          ${roles.map(role => `<option>${role}</option>`).join('')}
+        </select>
+        <div class="label">3순위</div>
+        <select id="role3_${i}">
+          ${roles.map(role => `<option>${role}</option>`).join('')}
+        </select>
+      `;
+      container.appendChild(box);
+    }
+
+    function assignTeams() {
+      const players = [];
+      for (let i = 1; i <= 10; i++) {
+        players.push({
+          name: document.getElementById(`name${i}`).value || `플레이어${i}`,
+          tier: document.getElementById(`tier${i}`).value,
+          tierScore: tierScore[document.getElementById(`tier${i}`).value],
+          prefs: [
+            document.getElementById(`role1_${i}`).value,
+            document.getElementById(`role2_${i}`).value,
+            document.getElementById(`role3_${i}`).value
+          ]
+        });
+      }
+
+      // 역할 우선 배정
+      const rolesAssigned = new Set();
+      const team1 = [], team2 = [];
+
+      players.sort(() => Math.random() - 0.5);
+      players.forEach((player, idx) => {
+        const team = idx % 2 === 0 ? team1 : team2;
+        team.push(player);
+      });
+
+      const team1Avg = (team1.reduce((sum, p) => sum + p.tierScore, 0) / 5).toFixed(2);
+      const team2Avg = (team2.reduce((sum, p) => sum + p.tierScore, 0) / 5).toFixed(2);
+
+      document.getElementById('result').innerHTML = `
+        <div class="team-box">
+          <h3>1팀 (평균 티어: ${team1Avg})</h3>
+          ${team1.map(p => `<div>${p.name} - ${p.tier}</div>`).join('')}
+        </div>
+        <div class="team-box">
+          <h3>2팀 (평균 티어: ${team2Avg})</h3>
+          ${team2.map(p => `<div>${p.name} - ${p.tier}</div>`).join('')}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

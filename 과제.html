@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>예약 리스트 - 관리자</title>
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; padding: 40px; background: #f2f2f2; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background: #003366;
+      color: white;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>예약 리스트 (관리자용)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>이름</th>
+        <th>연락처</th>
+        <th>차량</th>
+        <th>시작일</th>
+        <th>반납일</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>홍길동</td>
+        <td>010-1234-5678</td>
+        <td>세단</td>
+        <td>2025-05-25</td>
+        <td>2025-05-28</td>
+      </tr>
+      <!-- 실제 서버 연동 시 여기에 JS로 리스트 삽입 -->
+    </tbody>
+  </table>
+</body>
+</html>
+  
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>EZ렌트카</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #f4f4f4; }
+    header, footer {
+      background-color: #003366; color: white; text-align: center; padding: 20px;
+    }
+    nav a {
+      color: white; margin: 0 10px; text-decoration: none;
+    }
+    .container {
+      max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 { color: #003366; margin-bottom: 20px; text-align: center; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select, textarea {
+      width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;
+    }
+    button {
+      margin-top: 20px; width: 100%; padding: 12px; background: #003366; color: white;
+      border: none; border-radius: 5px; font-size: 16px;
+    }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd; padding: 12px; text-align: center;
+    }
+    th {
+      background-color: #003366; color: white;
+    }
+    .car-img {
+      width: 100%; border-radius: 10px; margin-bottom: 15px;
+    }
+    .btn {
+      display: inline-block; padding: 10px 20px; background: #003366; color: white;
+      border-radius: 5px; text-decoration: none;
+    }
+    section { margin-bottom: 60px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>EZ렌트카</h1>
+  <nav>
+    <a href="#home">홈</a>
+    <a href="#reservation">예약</a>
+    <a href="#car-detail">차량정보</a>
+    <a href="#admin">예약리스트</a>
+    <a href="#review">후기/문의</a>
+  </nav>
+</header>
+
+<!-- 예약하기 -->
+<section id="reservation" class="container">
+  <h2>차량 예약하기</h2>
+  <form>
+    <label for="name">이름</label>
+    <input type="text" id="name" name="name" required>
+    <label for="phone">연락처</label>
+    <input type="tel" id="phone" name="phone" required>
+    <label for="car">차량 선택</label>
+    <select id="car" name="car" required>
+      <option value="">-- 선택 --</option>
+      <option value="sedan">프리미엄 세단</option>
+      <option value="suv">패밀리 SUV</option>
+      <option value="sports">스포츠카</option>
+    </select>
+    <label for="start">대여 시작일</label>
+    <input type="date" id="start" name="start" required>
+    <label for="end">반납일</label>
+    <input type="date" id="end" name="end" required>
+    <button type="submit">예약 요청하기</button>
+  </form>
+</section>
+
+<!-- 예약 완료 -->
+<section id="success" class="container">
+  <h2>예약 완료</h2>
+  <p>예약이 성공적으로 접수되었습니다! 확인 전화를 드릴 예정입니다.</p>
+  <a href="#home" class="btn">홈으로 돌아가기</a>
+</section>
+
+<!-- 차량 상세 -->
+<section id="car-detail" class="container">
+  <h2>차량 상세 정보</h2>
+  <img src="https://source.unsplash.com/800x400/?car" alt="차량 이미지" class="car-img">
+  <p><strong>프리미엄 세단</strong><br>✔️ 휘발유 | ✔️ 5인승 | ✔️ 대형 트렁크 | ✔️ 2023년식 | ✔️ 내비게이션 포함</p>
+  <a href="#reservation" class="btn">이 차량 예약하기</a>
+</section>
+
+<!-- 관리자용 예약 리스트 -->
+<section id="admin" class="container">
+  <h2>관리자 예약 리스트</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>이름</th>
+        <th>연락처</th>
+        <th>차량</th>
+        <th>시작일</th>
+        <th>반납일</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>홍길동</td>
+        <td>010-1234-5678</td>
+        <td>세단</td>
+        <td>2025-05-25</td>
+        <td>2025-05-28</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 후기 및 문의 -->
+<section id="review" class="container">
+  <h2>고객 후기 & 문의</h2>
+  <form>
+    <label for="rname">이름</label>
+    <input type="text" id="rname" required>
+    <label for="message">내용</label>
+    <textarea id="message" rows="5" required></textarea>
+    <button type="submit">보내기</button>
+  </form>
+</section>
+
+<footer>
+  &copy; 2025 EZ렌트카. All rights reserved.
+</footer>
+
+</body>
+</html>
+
+
+
+

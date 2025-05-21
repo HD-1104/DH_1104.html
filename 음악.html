@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PATEKO - Rainy Day 홈</title>
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Do Hyeon', sans-serif;
+      background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #333;
+      position: relative;
+    }
+
+    /* 비 배경 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://i.ibb.co/3TWvwC7/rain.gif') repeat;
+      background-size: cover;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 번개 효과 */
+    .flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+      animation: flashAnim 10s infinite;
+    }
+
+    @keyframes flashAnim {
+      0%, 97%, 100% { opacity: 0; }
+      98% { opacity: 0.7; }
+      99% { opacity: 0; }
+    }
+
+    canvas#waves {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .box {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1rem;
+      text-decoration: none;
+      color: #fff;
+      background-color: #4e54c8;
+      padding: 0.5rem 1.5rem;
+      border-radius: 10px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    a:hover {
+      background-color: #3c3fa7;
+      transform: scale(1.05);
+    }
+
+    #themeToggle, #audioToggle {
+      position: fixed;
+      top: 20px;
+      background: #4e54c8;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 3;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    #themeToggle:hover, #audioToggle:hover {
+      background-color: #3c3fa7;
+      transform: scale(1.05);
+    }
+
+    #themeToggle { right: 20px; }
+    #audioToggle { right: 140px; }
+
+    .player-indicator {
+      position: fixed;
+      bottom: 70px;
+      left: 20px;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.7);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      z-index: 3;
+    }
+
+    .dark-theme {
+      background: linear-gradient(to bottom, #2c3e50, #4ca1af);
+      color: #eee;
+    }
+
+    .dark-theme .box { background-color: #2e2e2e; color: #eee; }
+    .dark-theme .player-indicator { background: rgba(30, 30, 30, 0.7); color: #fff; }
+    .dark-theme a { background-color: #3c3fa7; }
+    .dark-theme a:hover { background-color: #2c2f86; }
+  </style>
+</head>
+<body>
+
+  <canvas id="waves"></canvas>
+  <div class="flash"></div>
+
+  <button id="themeToggle">🌙 다크 모드</button>
+  <button id="audioToggle">⏸️ 음악 멈춤</button>
+
+  <div class="box">
+    <h1>🎵 Rainy Day by PATEKO</h1>
+    <p>비 오는 날, 음악과 함께하는 나만의 공간</p>
+    <a href="#">홈으로 가기</a>
+  </div>
+
+  <div class="player-indicator">
+    🎶 Rainy Day + 빗소리 재생 중...
+  </div>
+
+  <audio id="rainAudio" autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+  </audio>
+
+  <div style="display: none;">
+    <iframe id="youtubePlayer" width="0" height="0"
+      src="https://www.youtube.com/embed/kZ2d1zH2L9U?autoplay=1&loop=1&playlist=kZ2d1zH2L9U"
+      title="PATEKO Rainy Day" frameborder="0" allow="autoplay" allowfullscreen>
+    </iframe>
+  </div>
+
+  <script>
+    const rainAudio = document.getElementById('rainAudio');
+    rainAudio.volume = 0.3;
+
+    const audioBtn = document.getElementById('audioToggle');
+    let audioPlaying = true;
+
+    audioBtn.addEventListener('click', () => {
+      audioPlaying = !audioPlaying;
+      if (audioPlaying) {
+        rainAudio.play();
+        audioBtn.textContent = "⏸️ 음악 멈춤";
+      } else {
+        rainAudio.pause();
+        audioBtn.textContent = "▶️ 음악 재생";
+      }
+    });
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+    });
+
+    // 물결 애니메이션
+    const canvas = document.getElementById("waves");
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+
+    let t = 0;
+    function drawWave() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.beginPath();
+      for (let x = 0; x < w; x++) {
+        let y = h / 2 + Math.sin(x * 0.01 + t) * 10;
+        ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = "rgba(100, 100, 255, 0.2)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      t += 0.03;
+      requestAnimationFrame(drawWave);
+    }
+    drawWave();
+  </script>
+
+</body>
+</html>
