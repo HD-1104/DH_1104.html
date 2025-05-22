@@ -21,7 +21,6 @@
       position: relative;
     }
 
-    /* 비 배경 */
     body::before {
       content: "";
       position: fixed;
@@ -34,24 +33,25 @@
       z-index: 0;
     }
 
-    /* 번개 효과 */
-    .flash {
+    .blur-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
-      background: white;
-      opacity: 0;
+      backdrop-filter: blur(2px);
+      animation: subtleBlur 6s ease-in-out infinite;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1;
       pointer-events: none;
-      z-index: 5;
-      animation: flashAnim 10s infinite;
     }
 
-    @keyframes flashAnim {
-      0%, 97%, 100% { opacity: 0; }
-      98% { opacity: 0.7; }
-      99% { opacity: 0; }
+    @keyframes subtleBlur {
+      0%, 100% {
+        backdrop-filter: blur(2px);
+      }
+      50% {
+        backdrop-filter: blur(4px);
+      }
     }
 
     canvas#waves {
@@ -154,7 +154,7 @@
 <body>
 
   <canvas id="waves"></canvas>
-  <div class="flash"></div>
+  <div class="blur-overlay"></div>
 
   <button id="themeToggle">🌙 다크 모드</button>
   <button id="audioToggle">⏸️ 음악 멈춤</button>

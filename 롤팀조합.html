@@ -1,46 +1,131 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>롤 팀 자동 배정기</title>
+  <meta charset="UTF-8" />
+  <title>🎮 롤 팀 자동 배정기</title>
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: 'Arial'; background: #f8f9fa; margin: 20px; text-align: center; }
-    h1 { font-size: 28px; margin-bottom: 30px; }
-    .players-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1100px; margin: 0 auto 30px auto; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Do Hyeon', sans-serif;
+      background: linear-gradient(to bottom, #0f0f1c, #1a1a2e);
+      color: #f0f0f0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #fcd535;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    .players-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto 30px auto;
+    }
+
     .player-box {
-      background: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
+      background: #212529;
+      border: 2px solid #343a40;
+      border-radius: 12px;
       padding: 15px;
-      width: 200px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 220px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
     }
+
     .player-box input, .player-box select {
-      width: 100%; margin-bottom: 8px; padding: 5px;
-      border: 1px solid #ccc; border-radius: 5px;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 6px;
+      background: #2c2f3a;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
     }
-    .label { text-align: left; font-size: 14px; font-weight: bold; margin: 4px 0 2px 0; }
+
+    .label {
+      text-align: left;
+      font-size: 14px;
+      margin: 6px 0 2px;
+    }
+
     button {
-      padding: 10px 20px; font-size: 16px;
-      background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer;
-    }
-    button:hover { background-color: #45a049; }
-    .team-output { display: flex; justify-content: center; gap: 50px; margin-top: 30px; }
-    .team-box {
-      background: #fff;
-      border: 2px solid #ccc;
+      padding: 12px 24px;
+      font-size: 18px;
+      background: #5865f2;
+      color: white;
+      border: none;
       border-radius: 10px;
-      padding: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #4049c8;
+      transform: scale(1.05);
+    }
+
+    .team-output {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 30px;
+    }
+
+    .team-box {
+      background: #1f1f2e;
+      border: 2px solid #444;
+      border-radius: 12px;
+      padding: 20px;
       width: 300px;
       text-align: left;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .team-box h3 {
+      color: #fcd535;
+      margin-bottom: 12px;
+    }
+
+    #musicBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 16px;
+      background: #202225;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #musicBtn:hover {
+      background-color: #5865f2;
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <h1>🎮 롤 팀 자동 배정기</h1>
+  <h1>🎮 리그 오브 레전드 팀 자동 배정기</h1>
+
   <div class="players-container" id="players"></div>
   <button onclick="assignTeams()">✅ 역할/티어 기반 팀 배정</button>
   <div class="team-output" id="result"></div>
+
+  <!-- 🎵 음악 및 버튼 -->
+  <audio id="bgm" src="https://cdn.pixabay.com/audio/2022/03/22/audio_5c646c5805.mp3" preload="auto" autoplay loop></audio>
+  <button onclick="toggleMusic()" id="musicBtn">🎵 음악 정지</button>
 
   <script>
     const tiers = ["아이언", "브론즈", "실버", "골드", "플래티넘", "에메랄드", "다이아몬드", "마스터", "그랜드마스터", "챌린저"];
@@ -59,21 +144,13 @@
         <div class="label">플레이어 ${i}</div>
         <input type="text" placeholder="소환사명" id="name${i}">
         <div class="label">티어</div>
-        <select id="tier${i}">
-          ${tiers.map(tier => `<option>${tier}</option>`).join('')}
-        </select>
+        <select id="tier${i}">${tiers.map(tier => `<option>${tier}</option>`).join('')}</select>
         <div class="label">1순위</div>
-        <select id="role1_${i}">
-          ${roles.map(role => `<option>${role}</option>`).join('')}
-        </select>
+        <select id="role1_${i}">${roles.map(role => `<option>${role}</option>`).join('')}</select>
         <div class="label">2순위</div>
-        <select id="role2_${i}">
-          ${roles.map(role => `<option>${role}</option>`).join('')}
-        </select>
+        <select id="role2_${i}">${roles.map(role => `<option>${role}</option>`).join('')}</select>
         <div class="label">3순위</div>
-        <select id="role3_${i}">
-          ${roles.map(role => `<option>${role}</option>`).join('')}
-        </select>
+        <select id="role3_${i}">${roles.map(role => `<option>${role}</option>`).join('')}</select>
       `;
       container.appendChild(box);
     }
@@ -93,29 +170,40 @@
         });
       }
 
-      // 역할 우선 배정
-      const rolesAssigned = new Set();
+      // 임의로 팀 분배
       const team1 = [], team2 = [];
-
       players.sort(() => Math.random() - 0.5);
       players.forEach((player, idx) => {
-        const team = idx % 2 === 0 ? team1 : team2;
-        team.push(player);
+        (idx % 2 === 0 ? team1 : team2).push(player);
       });
 
-      const team1Avg = (team1.reduce((sum, p) => sum + p.tierScore, 0) / 5).toFixed(2);
-      const team2Avg = (team2.reduce((sum, p) => sum + p.tierScore, 0) / 5).toFixed(2);
+      const avg1 = (team1.reduce((sum, p) => sum + p.tierScore, 0) / 5).toFixed(2);
+      const avg2 = (team2.reduce((sum, p) => sum + p.tierScore, 0) / 5).toFixed(2);
 
       document.getElementById('result').innerHTML = `
         <div class="team-box">
-          <h3>1팀 (평균 티어: ${team1Avg})</h3>
+          <h3>1팀 (평균 티어: ${avg1})</h3>
           ${team1.map(p => `<div>${p.name} - ${p.tier}</div>`).join('')}
         </div>
         <div class="team-box">
-          <h3>2팀 (평균 티어: ${team2Avg})</h3>
+          <h3>2팀 (평균 티어: ${avg2})</h3>
           ${team2.map(p => `<div>${p.name} - ${p.tier}</div>`).join('')}
         </div>
       `;
+    }
+
+    let isPlaying = true;
+    function toggleMusic() {
+      const audio = document.getElementById("bgm");
+      const btn = document.getElementById("musicBtn");
+      if (isPlaying) {
+        audio.pause();
+        btn.innerText = "🎵 음악 재생";
+      } else {
+        audio.play();
+        btn.innerText = "🎵 음악 정지";
+      }
+      isPlaying = !isPlaying;
     }
   </script>
 </body>
