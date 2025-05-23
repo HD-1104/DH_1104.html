@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>DAYUN ART</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #f4f4f4;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+    header h1 {
+      color: #8cc63f;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+    }
+    nav ul li {
+      cursor: pointer;
+    }
+    .container {
+      display: flex;
+    }
+    .sidebar {
+      width: 200px;
+      background-color: #e5e5e5;
+      padding: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    main {
+      flex-grow: 1;
+      padding: 20px;
+    }
+    .hero img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+    }
+    .section {
+      margin-top: 30px;
+    }
+    .section h2 {
+      margin-bottom: 15px;
+    }
+    .items, .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .item, .product {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      width: 180px;
+    }
+    .item img, .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DAYUN ART</h1>
+    <nav>
+      <ul>
+        <li>홈</li>
+        <li>작품 보기</li>
+        <li>장바구니</li>
+        <li>고객 갤러리</li>
+        <li>주문배송</li>
+        <li>작가 학습 입문</li>
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    <aside class="sidebar">
+      <h3>Category Item</h3>
+      <ul>
+        <li>명화 작품</li>
+        <li>풍경화</li>
+        <li>추상화</li>
+        <li>일러스트</li>
+        <li>포인트 벽지</li>
+        <li>어린이 벽지</li>
+      </ul>
+    </aside>
+    <main>
+      <section class="hero">
+        <img src="zebra-banner.jpg" alt="메인 배너">
+      </section>
+      <section class="section">
+        <h2>SPECIAL SHOP</h2>
+        <div class="items">
+          <div class="item">
+            <img src="tree.jpg" alt="나무">
+            <p>나무 벽화</p>
+          </div>
+          <div class="item">
+            <img src="rose.jpg" alt="장미">
+            <p>장미 벽화</p>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <h2>NEW ARRIVAL</h2>
+        <div class="products">
+          <div class="product">
+            <img src="rose.jpg" alt="장미">
+            <p>장미벽화그림</p>
+            <p>24,000원</p>
+          </div>
+          <div class="product">
+            <img src="zebra.jpg" alt="얼룩말">
+            <p>얼룩말 벽화</p>
+            <p>24,000원</p>
+          </div>
+          <div class="product">
+            <img src="tree.jpg" alt="나무">
+            <p>그린 트리</p>
+            <p>24,000원</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer>
+    <p>© 2008 dayunart.com All rights reserved</p>
+  </footer>
+</body>
+</html>
